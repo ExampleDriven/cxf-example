@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <context:component-scan base-package="org.exampledriven.cxfexample"/>
+
+	<security:http use-expressions="true">
+	    <security:http-basic/>
+        <security:intercept-url pattern="/rest/**" access="isAuthenticated()" />
+	</security:http>
+
+	<security:global-method-security secured-annotations="enabled"/>
+
+	<security:authentication-manager>
+	    <security:authentication-provider>
+	        <security:user-service>
+	            <security:user name="restuser" password="restuser" authorities="ROLE_RESTCLIENT"/>
+	        </security:user-service>
+	    </security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>

@@ -1,0 +1,10 @@
+This is the source code of the blog post 
+
+http://exampledriven.wordpress.com/2012/09/20/soap-and-rest-example-using-cxf-jax-rs-and-jax-ws/
+
+This project demonstrates how to build a simple CXF webservice using SOAP (JAX-WS) or REST (JAX-RS). Additionally it is using 
+ - CXF proxy clients for SOAP and REST
+ - Spring Security
+ - Spring bean validation, JSR 303
+
+To start the project type mvn jetty:run or mvn tomcat:run

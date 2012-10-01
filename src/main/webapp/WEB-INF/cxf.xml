@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xsi:schemaLocation="
+		http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+
+     <!-- REST -->
+     <import resource="classpath:META-INF/cxf/cxf.xml" />
+     <import resource="classpath:META-INF/cxf/osgi/cxf-extension-osgi.xml" />
+     
+     <!-- SOAP -->
+     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+     
+
+    <context:component-scan base-package="org.exampledriven.cxfexample"/>
+
+	<!-- PROVIDERS -->
+
+	<bean id="wadlProvider" class="org.apache.cxf.jaxrs.model.wadl.WadlGenerator">
+		<property name="applicationTitle" value="CXF Test sample application" />
+	</bean>
+
+	<bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+		<property name="marshallerProperties" ref="propertiesMap" />
+	</bean>
+
+	<util:map id="propertiesMap">
+		<entry key="jaxb.formatted.output">
+			<value type="java.lang.Boolean">true</value>
+		</entry>
+	</util:map>
+
+	<bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.JSONProvider">
+		<property name="namespaceMap" ref="jsonNamespaceMap" />
+	</bean>
+
+	<util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
+		<entry key="http://www.example.org/books" value="b" />
+	</util:map>
+
+	<!-- REST SERVER -->
+
+    <jaxrs:server id="restContainer" address="/rest">
+		<jaxrs:providers>
+			<ref bean="jaxbProvider" />
+			<ref bean="jsonProvider" />
+			<ref bean="wadlProvider" />
+  		</jaxrs:providers>
+        <jaxrs:serviceBeans>
+            <ref bean="locationService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:extensionMappings>
+            <entry key="xml" value="application/xml" />
+            <entry key="json" value="application/json" />
+        </jaxrs:extensionMappings>       
+    </jaxrs:server>
+
+	<!-- SOAP SERVER -->
+
+	<jaxws:endpoint id="location" implementor="#locationService" address="/soap" />
+
+	<!-- CXF Message logging -->
+ 
+    <cxf:bus>
+        <cxf:features>
+            <cxf:logging/>
+        </cxf:features>
+    </cxf:bus> 
+     
+	<!-- CLIENT -->
+	<!--
+  	<jaxrs:client id="locationClient"
+         address="http://localhost:8080/rest/"
+         serviceClass="org.exampledriven.cxfexample.webservice.LocationService"
+         inheritHeaders="true">
+         <jaxrs:headers>
+             <entry key="Accept" value="application/xml"/>
+         </jaxrs:headers>
+  	</jaxrs:client> 
+     --> 
+
+	<!-- Spring Validation -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+     
+</beans>

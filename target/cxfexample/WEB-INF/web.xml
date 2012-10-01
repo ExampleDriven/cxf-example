@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+       		WEB-INF/cxf.xml
+			WEB-INF/applicationContext-security.xml
+        </param-value>
+    </context-param>
+
+	<filter>
+	    <filter-name>springSecurityFilterChain</filter-name>
+	    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+	    <filter-name>springSecurityFilterChain</filter-name>
+	    <url-pattern>/cxf/*</url-pattern>
+	</filter-mapping>
+	
+    <listener>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+
+    <servlet>
+        <display-name>CXF Servlet</display-name>
+        <servlet-name>CXFServlet</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+<!-- 
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+        		WEB-INF/cxf.xml
+				WEB-INF/applicationContext-security.xml
+			</param-value>
+		</init-param>
+ -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+	<servlet>
+		<servlet-name>location</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>spring.profiles.active</param-name>
+			<param-value>test-profile</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+		
+	</servlet>
+
+	<servlet-mapping>
+    	<servlet-name>default</servlet-name>
+    	<url-pattern>/static/*</url-pattern>
+	</servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CXFServlet</servlet-name>
+        <url-pattern>/cxf/*</url-pattern>
+    </servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>location</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+    	<servlet-name>default</servlet-name>
+    	<url-pattern>*.png</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+    	<servlet-name>default</servlet-name>
+    	<url-pattern>*.js</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+    	<servlet-name>default</servlet-name>
+    	<url-pattern>*.css</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+    	<servlet-name>default</servlet-name>
+    	<url-pattern>*.ico</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/WEB-INF/jsp/error/uncaughtException.jsp</location>
+	</error-page>
+
+	<error-page>
+    	<error-code>404</error-code>
+    	<location>/WEB-INF/jsp/error/404.jsp</location>
+	</error-page>
+
+    
+</web-app>

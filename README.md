@@ -1,4 +1,0 @@
-cxf-example
-===========
-
-CXF Test
