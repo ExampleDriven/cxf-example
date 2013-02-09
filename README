@@ -11,3 +11,5 @@ This project demonstrates how to build a simple CXF webservice using SOAP (JAX-W
  - Spring bean validation, JSR 303
 
 To start the project type mvn jetty:run or mvn tomcat:run
+
+then open http://localhost:8080
