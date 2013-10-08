@@ -71,7 +71,7 @@ public interface LocationService {
 	@DELETE
 	@Path("*")
 	@Descriptions({
-		@Description(value = "deletes All location data", target = DocTarget.METHOD),
+		@Description(value = "deletes All location data", target = DocTarget.METHOD)
 	})
     public void deleteAllLocation();
 	
